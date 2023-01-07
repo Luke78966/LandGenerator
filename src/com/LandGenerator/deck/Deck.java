@@ -21,6 +21,7 @@ public class Deck {
     private int green = 0;
     private int blue = 0;
     private int black = 0;
+    private int colorless = 0;
     private int totalCost = 0;
     private int numNonLandCards = 0;
 
@@ -78,6 +79,13 @@ public class Deck {
         this.black = black;
     }
 
+    public int getColorless() {
+        return colorless;
+    }
+
+    public void setColorless(int colorless) {
+        this.colorless = colorless;
+    }
     public Deck(){
 
     }
@@ -158,13 +166,11 @@ public class Deck {
 
         for (NonLandCard card: nonLands){
             String cost = card.getManaCost();
-            for (int i = 0; i < cost.length(); i++){
+            String precedingNumbers = getPrecedingNumericValuesFromManaCost( cost, 0);
+            String coloredPips = cost.substring( precedingNumbers.length() );
+            for (int i = 0; i < coloredPips.length(); i++){
 
-                String s = String.valueOf(cost.charAt(0));
-
-                /**
-                 *   Check for NUMBERS here
-                 */
+                String s = String.valueOf(coloredPips.charAt(i));
 
                 if (s.equals("R")){
                     red++;
@@ -186,10 +192,6 @@ public class Deck {
                     green++;
                     totalCost++;
                 }
-                //char c = cost.charAt(i);
-
-
-
 
             }
         }
@@ -214,6 +216,13 @@ public class Deck {
         return null;
     }
 
+    public String getPrecedingNumericValuesFromManaCost( String manaCost, int index ) {
 
+        if ( !Character.isDigit( manaCost.charAt( index ) ) ) {
+            return manaCost.substring( 0, index );
+        }else{
+            return getPrecedingNumericValuesFromManaCost(manaCost, ++index);
+        }
+    }
 
 }
